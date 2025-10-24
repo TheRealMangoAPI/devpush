@@ -94,7 +94,8 @@ apt_install ca-certificates git jq curl || { err "Base package install failed"; 
 info "Installing Docker..."
 install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release; echo $UBUNTU_CODENAME) stable" >/etc/apt/sources.list.d/docker.list
+codename="${UBUNTU_CODENAME:-$VERSION_CODENAME}"
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/${ID_LIKE:-$ID} ${codename} stable" >/etc/apt/sources.list.d/docker.list
 apt_install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin || { err "Docker install failed"; exit 1; }
 ok "Docker installed."
 
